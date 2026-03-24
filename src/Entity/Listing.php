@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ListingRepository::class)]
 class Listing
 {
+
+    public const STATUS_OPEN = 'open';
+    public const STATUS_CLOSED = 'closed';
+    public const STATUS_FILLED = 'filled';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,6 +39,9 @@ class Listing
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
+
     #[ORM\ManyToOne(inversedBy: 'listings')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -51,6 +59,8 @@ class Listing
     public function __construct()
     {
         $this->applications = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->status = self::STATUS_OPEN;
     }
 
     public function getId(): ?int
@@ -127,6 +137,17 @@ class Listing
     {
         $this->createdAt = $createdAt;
 
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
         return $this;
     }
 
