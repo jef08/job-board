@@ -44,6 +44,16 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        
+        $user = $token->getUser();
+        if (in_array('ROLE_COMPANY', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('company_dashboard'));
+        }
+
+        if (in_array('ROLE_FREELANCER', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('freelancer_dashboard'));
+        }
+        
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
