@@ -39,7 +39,7 @@ class Listing
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255, unique: true, nullable:true)]
     private ?string $slug = null;
 
     #[ORM\ManyToOne(inversedBy: 'listings')]
