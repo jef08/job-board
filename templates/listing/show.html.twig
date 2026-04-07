@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listing{% endblock %}
+
+{% block body %}
+<h1>{{ listing.title }}</h1>
+<p>{{ listing.description }}</p>
+<p><strong>Category:</strong>{{ listing.category.name }}</p>
+<p><strong>Posted by:</strong>{{ listing.user.email }}</p>
+<p><strong>Status:</strong>{{ listing.status }}</p>
+{% if is_granted('ROLE_FREELANCER') %}
+    <a href="{{ path('app_listing_apply', {id: listing.id}) }}">Apply</a>
+{% endif %}
+{% for message in app.flashes('error') %}
+    <p style="color:red;">{{ message }}</p>
+{% endfor %}
+{% endblock %}

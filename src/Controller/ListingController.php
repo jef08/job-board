@@ -44,4 +44,11 @@ final class ListingController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/listing/{id}', name: 'app_listing_show')]
+    public function show(Listing $listing): Response {
+        return $this->render('listing/show.html.twig', [
+            'listing' => $listing,
+        ]);
+    }
 }

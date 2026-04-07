@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listing{% endblock %}
+
+{% block body %}
+<h1>Apply to {{ listing.title }}</h1>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button>Submit Application</button>
+{{ form_end(form) }}
+
+{% endblock %}

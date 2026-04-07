@@ -16,6 +16,7 @@
     <p><strong>Category:</strong>{{ listing.category.name }}</p>
     <p><strong>Posted by:</strong>{{ listing.user.email }}</p>
     <p><strong>Status:</strong>{{ listing.status }}</p>
+    <a href="{{ path('app_listing_show', {id: listing.id}) }}">View Details</a>
  </div>
 {% else %}
     <p>No listings found.</p>
