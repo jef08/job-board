@@ -1,0 +1,15 @@
+<h1>My Applications</h1>
+{% for application in applications %}
+<div>
+    <h2>{{ application.listing.title }}</h2>
+    <p><strong>Company: </strong>{{ application.listing.user.email }}</p>
+
+    <p><strong>Status: </strong>{{ application.status }}</p>
+
+    <p><strong>Applied on: </strong>{{ application.createdAt|date('Y-m-d') }}</p>
+
+    <a href="{{ path('app_listing_show', {id: application.listing.id}) }}">View Listing</a>
+</div>
+{% else %}
+<p>You haven't applied to any jobs yet</p>
+{% endfor %}

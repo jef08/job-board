@@ -12,5 +12,10 @@
     <h1>Hello {{ controller_name }}! ✅</h1>
 
     <a href="{{ path('app_listing_new') }}">Create New Listing</a>
+
+    {% if app.user %}
+        <a href="{{ path('app_logout') }}">Logout</a>
+    {% endif %}
 </div>
+
 {% endblock %}

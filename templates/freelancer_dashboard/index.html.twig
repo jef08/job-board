@@ -11,10 +11,12 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/jasfi/Desktop/job-board/src/Controller/FreelancerDashboardController.php</code></li>
-        <li>Your template at <code>C:/Users/jasfi/Desktop/job-board/templates/freelancer_dashboard/index.html.twig</code></li>
-    </ul>
+    {% if is_granted('ROLE_FREELANCER') %}
+        <a href="{{ path('app_freelancer_dashboard') }}">My Applications</a>
+    {% endif %}
+    
+    {% if app.user %}
+        <a href="{{ path('app_logout') }}">Logout</a>
+    {% endif %}
 </div>
 {% endblock %}
