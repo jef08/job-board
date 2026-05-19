@@ -51,4 +51,19 @@ final class ListingController extends AbstractController
             'listing' => $listing,
         ]);
     }
+
+    #[Route('/listing/{id}/applicants', name: 'app_listing_applicants')]
+    public function applicants(Listing $listing): Response {
+        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+
+        if ($listing->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You do not own this listing.');
+        }
+
+        return $this->render('listing/applicants.html.twig', [
+            'listing' => $listing,
+            'applications' => $listing->getApplications(),
+        ]); 
+    }
+
 }

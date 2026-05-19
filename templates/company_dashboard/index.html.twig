@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CompanyDashboardController!{% endblock %}
+{% block title %}Your Listings{% endblock %}
 
 {% block body %}
 <style>
@@ -8,14 +8,23 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<h1>Company Dashboard</h1>
+{% for listing in listings %}
+<div> 
+    <h2>{{ listing.title }}</h2>
+    <p><strong>Status: </strong>{{ listing.status }}</p>
 
-    <a href="{{ path('app_listing_new') }}">Create New Listing</a>
+    <p><strong>Created: </strong>{{ listing.createdAt|date('Y-m-d') }}</p>
 
-    {% if app.user %}
-        <a href="{{ path('app_logout') }}">Logout</a>
-    {% endif %}
+    <p><strong>Applications: </strong>{{ listing.applications|length }}</p>
+
+    <a href="{{ path('app_listing_show', {id: listing.id}) }}">View Listing</a>
+    <a href="{{ path('app_listing_applicants', {id: listing.id}) }}">View Applicants</a>
+
 </div>
+
+{% else %}
+<p>You haven't created any listings yet.</p>
+{% endfor %}
 
 {% endblock %}

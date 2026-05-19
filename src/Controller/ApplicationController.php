@@ -57,4 +57,37 @@ final class ApplicationController extends AbstractController
             'listing' => $listing,
         ]);
     }
+
+    #[Route('/application/{id}/accept', name: 'app_application_accept')]
+    public function accept(Application $application, EntityManagerInterface $em): Response {
+        $this->denyAccessUnlessGranted('ROLE_COMPANY', null, 'You cannot access this page');
+
+        if ($application->getListing()->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $application->setStatus(Application::STATUS_ACCEPTED);
+
+        $em->flush();
+
+        return $this->redirectToRoute('app_listing_applicants', [
+            'id' => $application->getListing()->getId(),
+        ]);
+    }
+
+    #[Route('/application/{id}/reject', name: 'app_application_reject')]
+    public function reject(Application $application, EntityManagerInterface $em): Response {
+        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+
+        if($application->getListing()->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $application->setStatus(Application::STATUS_REJECTED);
+        $em->flush();
+
+        return $this->redirectToRoute('app_listing_applicants', [
+            'id' => $application->getListing()->getId(),
+        ]);
+    }
 }
