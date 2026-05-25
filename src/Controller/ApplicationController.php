@@ -26,6 +26,10 @@ final class ApplicationController extends AbstractController
     public function apply(Listing $listing, Request $request, EntityManagerInterface $em, ApplicationRepository $applicationRepository): Response {
         $this->denyAccessUnlessGranted('ROLE_FREELANCER');
 
+        if ($listing->getStatus() !== 'open') {
+            throw $this->createAccessDeniedException('This listing is closed.');
+        }
+
         $existingApplication = $applicationRepository->findOneBy([
             'user' => $this->getUser(),
             'listing' => $listing,

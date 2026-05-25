@@ -9,7 +9,11 @@
 <p><strong>Posted by:</strong>{{ listing.user.email }}</p>
 <p><strong>Status:</strong>{{ listing.status }}</p>
 {% if is_granted('ROLE_FREELANCER') %}
+    {% if listing.status == 'open' %}
     <a href="{{ path('app_listing_apply', {id: listing.id}) }}">Apply</a>
+    {% else %}
+    <p>This listing is closed.</p>
+    {% endif %}
 {% endif %}
 {% for message in app.flashes('error') %}
     <p style="color:red;">{{ message }}</p>

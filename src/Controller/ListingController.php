@@ -66,4 +66,52 @@ final class ListingController extends AbstractController
         ]); 
     }
 
+    #[Route('/listing/{id}/edit', name: 'app_listing_edit')]
+    public function editListing(Listing $listing, Request $request, EntityManagerInterface $em): Response {
+        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+
+        if ($listing->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $form = $this->createForm(ListingFormType::class, $listing);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            return $this->redirectToRoute('company_dashboard');
+        }
+
+        return $this->render('listing/edit.html.twig', [
+            'form' => $form,
+            'listing' => $listing,
+        ]);
+    }
+
+    #[Route('/listing/{id}/close', name: 'app_listing_close')]
+    public function closeListing(Listing $listing, EntityManagerInterface $em): Response {
+        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+
+        if($listing->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $listing->setStatus('closed');
+        $em->flush();
+
+        return $this->redirectToRoute('company_dashboard');
+    }
+
+    #[Route('/listing/{id}/delete', name: 'app_listing_delete')]
+    public function deleteListing(Listing $listing, EntityManagerInterface $em): Response {
+        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+        if ($listing->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $em->remove($listing);
+        $em->flush();
+
+        return $this->redirectToRoute('company_dashboard');
+    }
 }

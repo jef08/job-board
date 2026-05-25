@@ -19,7 +19,10 @@
     <p><strong>Applications: </strong>{{ listing.applications|length }}</p>
 
     <a href="{{ path('app_listing_show', {id: listing.id}) }}">View Listing</a>
+    <a href="{{ path('app_listing_edit', {id: listing.id}) }}">Edit Listing</a>
+    <a href="{{ path('app_listing_delete', {id: listing.id}) }}">Delete Listing</a>
     <a href="{{ path('app_listing_applicants', {id: listing.id}) }}">View Applicants</a>
+    <a href="{{ path('app_listing_close', {id: listing.id}) }}">Close Listing</a>
 
 </div>
 

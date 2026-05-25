@@ -30,6 +30,7 @@ class ListingFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Listing::class,
+            'csrf_protection' => false,
         ]);
     }
 }
