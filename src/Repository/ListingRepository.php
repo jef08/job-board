@@ -16,6 +16,21 @@ class ListingRepository extends ServiceEntityRepository
         parent::__construct($registry, Listing::class);
     }
 
+    public function findFiltered(?string $search, ?int $category): array {
+        $qb = $this->createQueryBuilder('listing');
+        $qb->where('listing.status = :status')->setParameter('status', 'open');
+
+        if ($search) {
+            $qb->andWhere('listing.title LIKE :search')->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($category) {
+            $qb->andWhere('listing.category = :category')->setParameter('category', $category);
+        }
+
+        return $qb->orderBy('listing.createdAt', 'DESC')->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Listing[] Returns an array of Listing objects
 //     */

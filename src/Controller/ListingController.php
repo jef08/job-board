@@ -10,16 +10,24 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Listing;
 use App\Form\ListingFormType;
 use App\Repository\ListingRepository;
+use App\Repository\CategoryRepository;
 
 final class ListingController extends AbstractController
 {
     #[Route('/listing', name: 'app_listing')]
-    public function index(ListingRepository $listingRepository): Response
+    public function index(ListingRepository $listingRepository, Request $request, CategoryRepository $categoryRepository): Response
     {
-        $listings = $listingRepository->findAll();
+
+        $search = $request->query->get('search');
+        $category = $request->query->getInt('category');
+
+        $listings = $listingRepository->findFiltered($search, $category ?: null);
+
+        $categories = $categoryRepository->findAll();
 
         return $this->render('listing/index.html.twig', [
             'listings' => $listings,
+            'categories' => $categories,
         ]);
     }
 
