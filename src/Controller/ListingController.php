@@ -40,13 +40,15 @@ final class ListingController extends AbstractController
         $form = $this->createForm(ListingFormType::class, $listing);
         $form->handleRequest($request);
 
+        $user = $this->getUser();
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $listing->setUser($this->getUser());
+            $listing->setCompany($this->$user->getCompany());
             $em->persist($listing);
             $em->flush();
 
             return $this->redirectToRoute('company_dashboard');
-        }
+}
 
         return $this->render('listing/new.html.twig', [
             'form' => $form->createView(),
@@ -64,7 +66,9 @@ final class ListingController extends AbstractController
     public function applicants(Listing $listing): Response {
         $this->denyAccessUnlessGranted('ROLE_COMPANY');
 
-        if ($listing->getUser() !== $this->getUser()) {
+        $user = $this->getUser();
+
+        if ($listing->getCompany() !== $this->$user->getCompany()) {
             throw $this->createAccessDeniedException('You do not own this listing.');
         }
 
@@ -78,7 +82,9 @@ final class ListingController extends AbstractController
     public function editListing(Listing $listing, Request $request, EntityManagerInterface $em): Response {
         $this->denyAccessUnlessGranted('ROLE_COMPANY');
 
-        if ($listing->getUser() !== $this->getUser()) {
+        $user = $this->getUser();
+
+        if ($listing->getCompany() !== $this->$user->getCompany()) {
             throw $this->createAccessDeniedException();
         }
 
@@ -100,7 +106,9 @@ final class ListingController extends AbstractController
     public function closeListing(Listing $listing, EntityManagerInterface $em): Response {
         $this->denyAccessUnlessGranted('ROLE_COMPANY');
 
-        if($listing->getUser() !== $this->getUser()) {
+        $user = $this->getUser();
+
+        if ($listing->getCompany() !== $this->$user->getCompany()) {
             throw $this->createAccessDeniedException();
         }
 
@@ -112,8 +120,11 @@ final class ListingController extends AbstractController
 
     #[Route('/listing/{id}/delete', name: 'app_listing_delete')]
     public function deleteListing(Listing $listing, EntityManagerInterface $em): Response {
+
+        $user = $this->getUser();
+
         $this->denyAccessUnlessGranted('ROLE_COMPANY');
-        if ($listing->getUser() !== $this->getUser()) {
+        if ($listing->getCompany() !== $this->$user->getCompany()) {
             throw $this->createAccessDeniedException();
         }
 

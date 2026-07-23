@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ freelancer.user.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ freelancer.user.name }}</h1>
+
+    {% if freelancer.user.location %}
+        <p><strong>Location:</strong> {{ freelancer.user.location }}</p>
+    {% endif %}
+
+    {% if freelancer.hourlyRate %}
+        <p><strong>Rate:</strong> €{{ freelancer.hourlyRate }}/hr</p>
+    {% endif %}
+
+    {% if freelancer.yearsExperience %}
+        <p><strong>Experience:</strong> {{ freelancer.yearsExperience }} years</p>
+    {% endif %}
+
+    {% if freelancer.user.bio %}
+        <div class="bio">{{ freelancer.user.bio }}</div>
+    {% endif %}
+{% endblock %}

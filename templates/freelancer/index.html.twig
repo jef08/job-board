@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Freelancers{% endblock %}
+
+{% block body %}
+    <h1>Freelancers</h1>
+
+    <div class="freelancer-list">
+        {% for freelancer in freelancers %}
+            <div class="freelancer-card">
+                <h2>
+                    <a href="{{ path('app_freelancer_show', {id: freelancer.id}) }}">
+                        {{ freelancer.user.name }}
+                    </a>
+                </h2>
+                {% if freelancer.user.location %}
+                    <p>{{ freelancer.user.location }}</p>
+                {% endif %}
+                {% if freelancer.hourlyRate %}
+                    <p>€{{ freelancer.hourlyRate }}/hr</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>No freelancers registered yet.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ company.user.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ company.user.name }}</h1>
+
+    {% if company.industry %}
+        <p><strong>Industry:</strong> {{ company.industry }}</p>
+    {% endif %}
+
+    {% if company.user.location %}
+        <p><strong>Location:</strong> {{ company.user.location }}</p>
+    {% endif %}
+
+    {% if company.website %}
+        <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank" rel="noopener">{{ company.website }}</a></p>
+    {% endif %}
+
+    {% if company.companySize %}
+        <p><strong>Company size:</strong> {{ company.companySize }} employees</p>
+    {% endif %}
+
+    {% if company.user.bio %}
+        <div class="bio">{{ company.user.bio }}</div>
+    {% endif %}
+
+    <h2>Open Listings</h2>
+    <ul>
+        {% for listing in company.listings %}
+            {% if listing.status == constant('App\\Entity\\Listing::STATUS_OPEN') %}
+                <li>
+                    <a href="{{ path('app_listing_show', {id: listing.id}) }}">
+                        {{ listing.title }}
+                    </a>
+                </li>
+            {% endif %}
+        {% else %}
+            <li>No open listings right now.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Companies{% endblock %}
+
+{% block body %}
+    <h1>Companies</h1>
+
+    <div class="company-list">
+        {% for company in companies %}
+            <div class="company-card">
+                <h2>
+                    <a href="{{ path('app_company_show', {id: company.id}) }}">
+                        {{ company.user.name }}
+                    </a>
+                </h2>
+                {% if company.industry %}
+                    <p>{{ company.industry }}</p>
+                {% endif %}
+                {% if company.user.location %}
+                    <p>{{ company.user.location }}</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>No companies registered yet.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

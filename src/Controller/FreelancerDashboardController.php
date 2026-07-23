@@ -9,7 +9,7 @@ use App\Repository\ApplicationRepository;
 
 final class FreelancerDashboardController extends AbstractController
 {
-    #[Route('/freelancer/dashboard', name: 'freelancer_dashboard')]
+    #[Route('/dashboard/freelancer', name: 'freelancer_dashboard')]
     public function index(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_FREELANCER');
@@ -23,8 +23,10 @@ final class FreelancerDashboardController extends AbstractController
     public function freelancerDashboard(ApplicationRepository $applicationRepository): Response {
         $this->denyAccessUnlessGranted('ROLE_FREELANCER');
 
+        $user = $this->getUser();
+
         $applications = $applicationRepository->findBy(
-            ['user' => $this->getUser()],
+            ['freelancer' => $this->$user->getFreelancer()],
             ['createdAt' => 'DESC']
         );
 

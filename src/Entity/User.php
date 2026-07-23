@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -45,23 +43,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
 
-    /**
-     * @var Collection<int, Listing>
-     */
-    #[ORM\OneToMany(targetEntity: Listing::class, mappedBy: 'user', orphanRemoval: false)]
-    private Collection $listings;
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Company::class, cascade: ['persist', 'remove'])]
+    private ?Company $company = null;
 
-    /**
-     * @var Collection<int, Application>
-     */
-    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'user')]
-    private Collection $applications;
-
-    public function __construct()
-    {
-        $this->listings = new ArrayCollection();
-        $this->applications = new ArrayCollection();
-    }
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Freelancer::class, cascade: ['persist', 'remove'])]
+    private ?Freelancer $freelancer = null;
 
     public function getId(): ?int
     {
@@ -180,62 +166,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Listing>
-     */
-    public function getListings(): Collection
+    public function getCompany(): ?Company
     {
-        return $this->listings;
+        return $this->company;
     }
 
-    public function addListing(Listing $listing): static
+    public function setCompany(?Company $company): static
     {
-        if (!$this->listings->contains($listing)) {
-            $this->listings->add($listing);
-            $listing->setUser($this);
+        $this->company = $company;
+
+        // set the owning side of the relation if necessary
+        if ($company !== null && $company->getUser() !== $this) {
+            $company->setUser($this);
         }
+
+        $this->company = $company;
 
         return $this;
     }
 
-    public function removeListing(Listing $listing): static
+    public function getFreelancer(): ?Freelancer
     {
-        if ($this->listings->removeElement($listing)) {
-            // set the owning side to null (unless already changed)
-            if ($listing->getUser() === $this) {
-                $listing->setUser(null);
-            }
-        }
-
-        return $this;
+        return $this->freelancer;
     }
 
-    /**
-     * @return Collection<int, Application>
-     */
-    public function getApplications(): Collection
+    public function setFreelancer(?Freelancer $freelancer): static
     {
-        return $this->applications;
-    }
+        $this->freelancer = $freelancer;
 
-    public function addApplication(Application $application): static
-    {
-        if (!$this->applications->contains($application)) {
-            $this->applications->add($application);
-            $application->setUser($this);
+        // set the owning side of the relation if necessary
+        if ($freelancer !== null && $freelancer->getUser() !== $this) {
+            $freelancer->setUser($this);
         }
 
-        return $this;
-    }
-
-    public function removeApplication(Application $application): static
-    {
-        if ($this->applications->removeElement($application)) {
-            // set the owning side to null (unless already changed)
-            if ($application->getUser() === $this) {
-                $application->setUser(null);
-            }
-        }
+        $this->freelancer = $freelancer;
 
         return $this;
     }

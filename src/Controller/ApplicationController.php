@@ -30,8 +30,10 @@ final class ApplicationController extends AbstractController
             throw $this->createAccessDeniedException('This listing is closed.');
         }
 
+        $user = $this->getUser();
+
         $existingApplication = $applicationRepository->findOneBy([
-            'user' => $this->getUser(),
+            'freelancer' => $this->$user->getFreelancer(),
             'listing' => $listing,
         ]);
 
@@ -47,8 +49,10 @@ final class ApplicationController extends AbstractController
         $form = $this->createForm(ApplicationFormType::class, $application);
         $form->handleRequest($request);
 
+        $user = $this->getUser();
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $application->setUser($this->getUser());
+            $application->setFreelancer($this->$user->getFreelancer());
             $application->setListing($listing);
 
             $em->persist($application);
@@ -66,7 +70,9 @@ final class ApplicationController extends AbstractController
     public function accept(Application $application, EntityManagerInterface $em): Response {
         $this->denyAccessUnlessGranted('ROLE_COMPANY', null, 'You cannot access this page');
 
-        if ($application->getListing()->getUser() !== $this->getUser()) {
+        $user = $this->getUser();
+
+        if ($application->getListing()->getCompany() !== $this->$user->getCompany()) {
             throw $this->createAccessDeniedException();
         }
 
@@ -83,7 +89,9 @@ final class ApplicationController extends AbstractController
     public function reject(Application $application, EntityManagerInterface $em): Response {
         $this->denyAccessUnlessGranted('ROLE_COMPANY');
 
-        if($application->getListing()->getUser() !== $this->getUser()) {
+        $user = $this->getUser();
+
+        if ($application->getListing()->getCompany() !== $this->$user->getCompany()) {
             throw $this->createAccessDeniedException();
         }
 

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApplicationRepository::class)]
+#[ORM\UniqueConstraint(name: 'UNIQ_LISTING_FREELANCER', columns: ['listing_id', 'freelancer_id'])]
 class Application
 {
 
@@ -33,8 +34,8 @@ class Application
     private ?Listing $listing = null;
 
     #[ORM\ManyToOne(inversedBy: 'applications')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    #[ORM\JoinColumn(nullable:false)]
+    private ?Freelancer $freelancer = null;
 
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
@@ -94,14 +95,14 @@ class Application
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getFreelancer(): ?Freelancer
     {
-        return $this->user;
+        return $this->freelancer;
     }
 
-    public function setUser(?User $user): static
+    public function setFreelancer(?Freelancer $freelancer): static
     {
-        $this->user = $user;
+        $this->freelancer = $freelancer;
 
         return $this;
     }

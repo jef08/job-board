@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Company;
+use App\Entity\Freelancer;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,29 +15,38 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use App\Security\AppAuthenticator;
 
+
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $em, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+       if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $role = $form->get('role')->getData();
-            $user->setRoles([$role]);
+            $accountType = $form->get('accountType')->getData();
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            if ($accountType === 'ROLE_COMPANY') {
+                $user->setRoles(['ROLE_COMPANY']);
+                $profile = new Company();
+                $profile->setUser($user);
+                $em->persist($profile);
+            } else {
+                $user->setRoles(['ROLE_FREELANCER']);
+                $profile = new Freelancer();
+                $profile->setUser($user);
+                $em->persist($profile);
+            }
 
-            // do anything else you need here, like send an email
+            $em->persist($user);
+            $em->flush();
 
             return $userAuthenticator->authenticateUser($user, $authenticator, $request);
         }
