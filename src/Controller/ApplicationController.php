@@ -61,10 +61,8 @@ final class ApplicationController extends AbstractController
         $form = $this->createForm(ApplicationFormType::class, $application);
         $form->handleRequest($request);
 
-        $user = $this->getUser();
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $application->setFreelancer($this->$user->getFreelancer());
+            $application->setFreelancer($user->getFreelancer());
             $application->setListing($listing);
 
             $em->persist($application);

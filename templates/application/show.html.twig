@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Application from {{ application.freelancer.user.name }}{% endblock %}
+
+{% block body %}
+    <h1>Application for {{ application.listing.title }}</h1>
+
+    <p><strong>From:</strong>
+        <a href="{{ path('app_freelancer_show', {id: application.freelancer.id}) }}">
+            {{ application.freelancer.user.name }}
+        </a>
+    </p>
+    <p><strong>Status:</strong> {{ application.status }}</p>
+    <p><strong>Applied:</strong> {{ application.createdAt|date('M j, Y') }}</p>
+
+    <h2>Cover Message</h2>
+    <p>{{ application.coverMessage }}</p>
+
+    {% if is_granted(constant('App\\Security\\Voter\\ApplicationVoter::MANAGE'), application) %}
+        <form method="post" action="{{ path('app_application_accept', {id: application.id}) }}" onsubmit="return confirm('Accept this application?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('accept-application-' ~ application.id) }}">
+            <button type="submit">Accept</button>
+        </form>
+        <form method="post" action="{{ path('app_application_reject', {id: application.id}) }}" onsubmit="return confirm('Reject this application?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('reject-application-' ~ application.id) }}">
+            <button type="submit">Reject</button>
+        </form>
+    {% endif %}
+{% endblock %}

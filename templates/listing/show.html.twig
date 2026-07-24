@@ -6,7 +6,7 @@
 <h1>{{ listing.title }}</h1>
 <p>{{ listing.description }}</p>
 <p><strong>Category:</strong>{{ listing.category.name }}</p>
-<p><strong>Posted by:</strong>{{ listing.user.email }}</p>
+<p><strong>Posted by:</strong>{{ listing.company.user.email }}</p>
 <p><strong>Status:</strong>{{ listing.status }}</p>
 {% if is_granted('ROLE_FREELANCER') %}
     {% if listing.status == 'open' %}

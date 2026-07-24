@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
 
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $accountType = $form->get('accountType')->getData();
+            $accountType = $form->get('role')->getData();
 
             if ($accountType === 'ROLE_COMPANY') {
                 $user->setRoles(['ROLE_COMPANY']);

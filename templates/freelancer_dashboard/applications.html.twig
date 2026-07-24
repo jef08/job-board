@@ -2,7 +2,7 @@
 {% for application in applications %}
 <div>
     <h2>{{ application.listing.title }}</h2>
-    <p><strong>Company: </strong>{{ application.listing.user.email }}</p>
+    <p><strong>Company: </strong>{{ application.listing.company.user.email }}</p>
 
     <p><strong>Status: </strong>{{ application.status }}</p>
 

@@ -17,7 +17,7 @@ class Company
 
     #[ORM\OneToOne(inversedBy: 'company', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $industry = null;
@@ -49,9 +49,9 @@ class Company
         return $this->user;
     }
 
-    public function setUser(User $User): static
+    public function setUser(User $user): static
     {
-        $this->user = $User;
+        $this->user = $user;
 
         return $this;
     }

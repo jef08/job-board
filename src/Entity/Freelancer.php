@@ -17,7 +17,7 @@ class Freelancer
 
     #[ORM\OneToOne(inversedBy: 'freelancer', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $hourlyRate = null;
@@ -46,9 +46,9 @@ class Freelancer
         return $this->user;
     }
 
-    public function setUser(User $User): static
+    public function setUser(User $user): static
     {
-        $this->user = $User;
+        $this->user = $user;
 
         return $this;
     }
