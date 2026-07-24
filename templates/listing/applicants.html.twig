@@ -7,12 +7,13 @@
 <p><strong>Applicant:</strong>{{ application.user.email }}</p>
 <p><strong>Status:</strong>{{ application.status }}</p>
 <p><strong>Applied:</strong>{{ application.createdAt|date('Y-m-d')}}</p>
-<p><strong>Cover Message</strong></p>
-<p>{{ application.coverMessage}}</p>
 
-<a href="{{ path('app_application_accept', {id: application.id}) }}">Accept</a>
-<a href="{{ path('app_application_reject', {id: application.id}) }}">Reject</a>
-
+<li>
+    <a href="{{ path('app_application_show', {id: application.id}) }}">
+        {{ application.freelancer.user.name }}
+    </a>
+     — {{ application.status }}
+</li>
 </div>
 
 {% else %}

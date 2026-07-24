@@ -23,10 +23,11 @@ final class FreelancerDashboardController extends AbstractController
     public function freelancerDashboard(ApplicationRepository $applicationRepository): Response {
         $this->denyAccessUnlessGranted('ROLE_FREELANCER');
 
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
         $applications = $applicationRepository->findBy(
-            ['freelancer' => $this->$user->getFreelancer()],
+            ['freelancer' => $user->getFreelancer()],
             ['createdAt' => 'DESC']
         );
 

@@ -11,6 +11,7 @@ use App\Entity\Listing;
 use App\Form\ListingFormType;
 use App\Repository\ListingRepository;
 use App\Repository\CategoryRepository;
+use App\Security\Voter\ListingVoter;
 
 final class ListingController extends AbstractController
 {
@@ -40,15 +41,16 @@ final class ListingController extends AbstractController
         $form = $this->createForm(ListingFormType::class, $listing);
         $form->handleRequest($request);
 
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $listing->setCompany($this->$user->getCompany());
+            $listing->setCompany($user->getCompany());
             $em->persist($listing);
             $em->flush();
 
             return $this->redirectToRoute('company_dashboard');
-}
+        }
 
         return $this->render('listing/new.html.twig', [
             'form' => $form->createView(),
@@ -64,13 +66,8 @@ final class ListingController extends AbstractController
 
     #[Route('/listing/{id}/applicants', name: 'app_listing_applicants')]
     public function applicants(Listing $listing): Response {
-        $this->denyAccessUnlessGranted('ROLE_COMPANY');
 
-        $user = $this->getUser();
-
-        if ($listing->getCompany() !== $this->$user->getCompany()) {
-            throw $this->createAccessDeniedException('You do not own this listing.');
-        }
+        $this->denyAccessUnlessGranted(ListingVoter::EDIT, $listing);
 
         return $this->render('listing/applicants.html.twig', [
             'listing' => $listing,
@@ -78,15 +75,10 @@ final class ListingController extends AbstractController
         ]); 
     }
 
-    #[Route('/listing/{id}/edit', name: 'app_listing_edit')]
+    #[Route('/listing/{id}/edit', name: 'app_listing_edit', methods: ['GET', 'POST'])]
     public function editListing(Listing $listing, Request $request, EntityManagerInterface $em): Response {
-        $this->denyAccessUnlessGranted('ROLE_COMPANY');
 
-        $user = $this->getUser();
-
-        if ($listing->getCompany() !== $this->$user->getCompany()) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->denyAccessUnlessGranted(ListingVoter::EDIT, $listing);
 
         $form = $this->createForm(ListingFormType::class, $listing);
         $form->handleRequest($request);
@@ -102,14 +94,13 @@ final class ListingController extends AbstractController
         ]);
     }
 
-    #[Route('/listing/{id}/close', name: 'app_listing_close')]
-    public function closeListing(Listing $listing, EntityManagerInterface $em): Response {
-        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+    #[Route('/listing/{id}/close', name: 'app_listing_close', methods: ['POST'])]
+    public function closeListing(Listing $listing, EntityManagerInterface $em, Request $request): Response {
 
-        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(ListingVoter::EDIT, $listing);
 
-        if ($listing->getCompany() !== $this->$user->getCompany()) {
-            throw $this->createAccessDeniedException();
+        if (!$this->isCsrfTokenValid('close-listing-' . $listing->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
         $listing->setStatus('closed');
@@ -118,14 +109,13 @@ final class ListingController extends AbstractController
         return $this->redirectToRoute('company_dashboard');
     }
 
-    #[Route('/listing/{id}/delete', name: 'app_listing_delete')]
-    public function deleteListing(Listing $listing, EntityManagerInterface $em): Response {
+    #[Route('/listing/{id}/delete', name: 'app_listing_delete', methods: ['POST'])]
+    public function deleteListing(Listing $listing, EntityManagerInterface $em, Request $request): Response {
 
-        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(ListingVoter::EDIT, $listing);
 
-        $this->denyAccessUnlessGranted('ROLE_COMPANY');
-        if ($listing->getCompany() !== $this->$user->getCompany()) {
-            throw $this->createAccessDeniedException();
+        if (!$this->isCsrfTokenValid('delete-listing-' . $listing->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
         $em->remove($listing);

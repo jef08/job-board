@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Form\ApplicationFormType;
 use App\Entity\Application;
 use App\Repository\ApplicationRepository;
+use App\Security\Voter\ApplicationVoter;
 
 final class ApplicationController extends AbstractController
 {
@@ -22,6 +23,16 @@ final class ApplicationController extends AbstractController
         ]);
     }
 
+    #[Route('/application/{id}', name: 'app_application_show')]
+    public function show(Application $application): Response
+    {
+        $this->denyAccessUnlessGranted(ApplicationVoter::VIEW, $application);
+
+        return $this->render('application/show.html.twig', [
+            'application' => $application,
+        ]);
+    }
+
     #[Route('/listing/{id}/apply', name: 'app_listing_apply')]
     public function apply(Listing $listing, Request $request, EntityManagerInterface $em, ApplicationRepository $applicationRepository): Response {
         $this->denyAccessUnlessGranted('ROLE_FREELANCER');
@@ -30,10 +41,11 @@ final class ApplicationController extends AbstractController
             throw $this->createAccessDeniedException('This listing is closed.');
         }
 
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
         $existingApplication = $applicationRepository->findOneBy([
-            'freelancer' => $this->$user->getFreelancer(),
+            'freelancer' => $user->getFreelancer(),
             'listing' => $listing,
         ]);
 
@@ -66,14 +78,13 @@ final class ApplicationController extends AbstractController
         ]);
     }
 
-    #[Route('/application/{id}/accept', name: 'app_application_accept')]
-    public function accept(Application $application, EntityManagerInterface $em): Response {
-        $this->denyAccessUnlessGranted('ROLE_COMPANY', null, 'You cannot access this page');
+    #[Route('/application/{id}/accept', name: 'app_application_accept', methods: ['POST'])]
+    public function accept(Application $application, EntityManagerInterface $em, Request $request): Response {
+    
+        $this->denyAccessUnlessGranted(ApplicationVoter::MANAGE, $application);
 
-        $user = $this->getUser();
-
-        if ($application->getListing()->getCompany() !== $this->$user->getCompany()) {
-            throw $this->createAccessDeniedException();
+        if (!$this->isCsrfTokenValid('accept-application-' . $application->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
         $application->setStatus(Application::STATUS_ACCEPTED);
@@ -85,14 +96,13 @@ final class ApplicationController extends AbstractController
         ]);
     }
 
-    #[Route('/application/{id}/reject', name: 'app_application_reject')]
-    public function reject(Application $application, EntityManagerInterface $em): Response {
-        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+    #[Route('/application/{id}/reject', name: 'app_application_reject', methods: ['POST'])]
+    public function reject(Application $application, EntityManagerInterface $em, Request $request): Response {
 
-        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(ApplicationVoter::MANAGE, $application);
 
-        if ($application->getListing()->getCompany() !== $this->$user->getCompany()) {
-            throw $this->createAccessDeniedException();
+        if (!$this->isCsrfTokenValid('reject-application-' . $application->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
         $application->setStatus(Application::STATUS_REJECTED);

@@ -14,10 +14,11 @@ final class CompanyDashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_COMPANY', null, 'You cannot access this page');
 
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
         $listings = $listingRepository->findBy(
-            ['company' => $this->$user->getCompany()],
+            ['company' => $user->getCompany()],
             ['createdAt' => 'DESC']
         );
 
