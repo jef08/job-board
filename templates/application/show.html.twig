@@ -10,7 +10,7 @@
             {{ application.freelancer.user.name }}
         </a>
     </p>
-    <p><strong>Status:</strong> {{ application.status }}</p>
+    <p><strong>Status:</strong> {{ application.status.label }}</p>
     <p><strong>Applied:</strong> {{ application.createdAt|date('M j, Y') }}</p>
 
     <h2>Cover Message</h2>

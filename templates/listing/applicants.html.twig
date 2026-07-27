@@ -5,14 +5,14 @@
 <div>
 
 <p><strong>Applicant:</strong>{{ application.freelancer.user.email }}</p>
-<p><strong>Status:</strong>{{ application.status }}</p>
+<p><strong>Status:</strong>{{ application.status.label }}</p>
 <p><strong>Applied:</strong>{{ application.createdAt|date('Y-m-d')}}</p>
 
 <li>
     <a href="{{ path('app_application_show', {id: application.id}) }}">
         {{ application.freelancer.user.name }}
     </a>
-     — {{ application.status }}
+     — {{ application.status.label }}
 </li>
 </div>
 

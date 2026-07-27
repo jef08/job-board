@@ -7,15 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\ListingStatus;
 
 #[ORM\Entity(repositoryClass: ListingRepository::class)]
 class Listing
 {
-
-    public const STATUS_OPEN = 'open';
-    public const STATUS_CLOSED = 'closed';
-    public const STATUS_FILLED = 'filled';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,8 +29,8 @@ class Listing
     #[ORM\Column(length: 50)]
     private ?string $jobType = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    #[ORM\Column(length: 50, enumType: ListingStatus::class)]
+    private ?ListingStatus $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -60,7 +56,7 @@ class Listing
     {
         $this->applications = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
-        $this->status = self::STATUS_OPEN;
+        $this->status = ListingStatus::Open;
     }
 
     public function getId(): ?int
@@ -116,16 +112,20 @@ class Listing
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?ListingStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(ListingStatus $status): static
     {
         $this->status = $status;
 
         return $this;
+    }
+
+    public function isOpen(): bool {
+        return $this->status === ListingStatus::Open;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

@@ -31,6 +31,24 @@ class ListingRepository extends ServiceEntityRepository
         return $qb->orderBy('listing.createdAt', 'DESC')->getQuery()->getResult();
     }
 
+    public function findOneBySlug(string $slug): ?Listing {
+        return $this->createQueryBuilder('listing')
+            ->where('listing.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findRecentOpen(int $limit = 5): array {
+        return $this->createQueryBuilder('listing')
+            ->where('listing.status = :status')
+            ->setParameter('status', 'open')
+            ->orderBy('listing.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Listing[] Returns an array of Listing objects
 //     */

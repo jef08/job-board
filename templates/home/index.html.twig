@@ -1,20 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Job Board — Find Work, Find Talent{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Job Board</h1>
+    <p>Connecting freelancers with companies looking for talent.</p>
 
-<div class="example-wrapper">
-    <h1>HELLO! {{ controller_name }}! ✅</h1>
+    {% if app.user %}
+        <p>Welcome back, {{ app.user.name }}.</p>
+        {% if is_granted('ROLE_COMPANY') %}
+            <a href="{{ path('company_dashboard') }}">Go to your dashboard</a>
+        {% elseif is_granted('ROLE_FREELANCER') %}
+            <a href="{{ path('freelancer_dashboard') }}">Go to your dashboard</a>
+        {% endif %}
+    {% else %}
+        <a href="{{ path('app_login') }}">Log in</a>
+        <a href="{{ path('app_register') }}">Sign up</a>
+    {% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/jasfi/Desktop/job-board/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/jasfi/Desktop/job-board/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+    <hr>
+
+    <h2>For Companies</h2>
+    <p>Post job listings and review applications from freelancers.</p>
+
+    <h2>For Freelancers</h2>
+    <p>Browse open listings and apply to jobs that match your skills.</p>
+
+    <p><a href="{{ path('app_listing') }}">Browse all listings</a></p>
 {% endblock %}

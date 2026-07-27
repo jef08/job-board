@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\ApplicationFormType;
 use App\Entity\Application;
+use App\Enum\ApplicationStatus;
+use App\Enum\ListingStatus;
 use App\Repository\ApplicationRepository;
 use App\Security\Voter\ApplicationVoter;
 
@@ -37,7 +39,7 @@ final class ApplicationController extends AbstractController
     public function apply(Listing $listing, Request $request, EntityManagerInterface $em, ApplicationRepository $applicationRepository): Response {
         $this->denyAccessUnlessGranted('ROLE_FREELANCER');
 
-        if ($listing->getStatus() !== 'open') {
+        if ($listing->getStatus() !== ListingStatus::Open) {
             throw $this->createAccessDeniedException('This listing is closed.');
         }
 
@@ -52,7 +54,7 @@ final class ApplicationController extends AbstractController
         if($existingApplication) {
             $this->addFlash('error', 'You have already applied to this job');
             return $this->redirectToRoute('app_listing_show', [
-                'id' => $listing->getId(),
+                'slug' => $listing->getSlug(),
             ]);
         }
 
@@ -85,7 +87,7 @@ final class ApplicationController extends AbstractController
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        $application->setStatus(Application::STATUS_ACCEPTED);
+        $application->setStatus(ApplicationStatus::Accepted);
 
         $em->flush();
 
@@ -103,7 +105,7 @@ final class ApplicationController extends AbstractController
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        $application->setStatus(Application::STATUS_REJECTED);
+        $application->setStatus(ApplicationStatus::Rejected);
         $em->flush();
 
         return $this->redirectToRoute('app_listing_applicants', [

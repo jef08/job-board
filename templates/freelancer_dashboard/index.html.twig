@@ -1,22 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FreelancerDashboardController!{% endblock %}
+{% block title %}Freelancer Dashboard{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Welcome back, {{ app.user.name }}</h1>
+    <a href="{{ path('app_freelancer_profile_edit') }}">Edit Profile</a>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h2>Featured Listings</h2>
+    <ul>
+        {% for listing in featuredListings %}
+            <li>
+                <a href="{{ path('app_listing_show', {slug: listing.slug}) }}">{{ listing.title }}</a>
+                — {{ listing.company.user.name }}
+            </li>
+        {% else %}
+            <li>No open listings right now.</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ path('app_listing') }}">Browse all listings</a>
 
-    {% if is_granted('ROLE_FREELANCER') %}
-        <a href="{{ path('app_freelancer_dashboard') }}">My Applications</a>
-    {% endif %}
-    
-    {% if app.user %}
-        <a href="{{ path('app_logout') }}">Logout</a>
-    {% endif %}
-</div>
+    <h2>Your Recent Applications</h2>
+    <ul>
+        {% for application in recentApplications %}
+            <li>
+                <a href="{{ path('app_application_show', {id: application.id}) }}">
+                    {{ application.listing.title }}
+                </a>
+                — {{ application.status.label }}
+            </li>
+        {% else %}
+            <li>You haven't applied to anything yet.</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ path('app_freelancer_applications') }}">View all your applications</a>
 {% endblock %}

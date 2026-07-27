@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ApplicationStatus;
 use App\Repository\ApplicationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,10 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Application
 {
 
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_ACCEPTED = 'accepted';
-    public const STATUS_REJECTED = 'rejected';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -23,8 +20,8 @@ class Application
     #[ORM\Column(type: Types::TEXT)]
     private ?string $coverMessage = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    #[ORM\Column(length: 50, enumType: ApplicationStatus::class)]
+    private ?ApplicationStatus $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -39,7 +36,7 @@ class Application
 
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
-        $this->status = self::STATUS_PENDING;
+        $this->status = ApplicationStatus::Pending;
     }
 
     public function getId(): ?int
@@ -59,12 +56,12 @@ class Application
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?ApplicationStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(ApplicationStatus $status): static
     {
         $this->status = $status;
 

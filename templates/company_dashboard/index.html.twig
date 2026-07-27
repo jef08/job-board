@@ -9,10 +9,11 @@
 </style>
 
 <h1>Company Dashboard</h1>
+<a href="{{ path('app_company_profile_edit') }}">Edit Profile</a>
 {% for listing in listings %}
 <div> 
     <h2>{{ listing.title }}</h2>
-    <p><strong>Status: </strong>{{ listing.status }}</p>
+    <p><strong>Status: </strong>{{ listing.status.label }}</p>
 
     <p><strong>Created: </strong>{{ listing.createdAt|date('Y-m-d') }}</p>
 

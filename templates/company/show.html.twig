@@ -28,9 +28,9 @@
     <h2>Open Listings</h2>
     <ul>
         {% for listing in company.listings %}
-            {% if listing.status == constant('App\\Entity\\Listing::STATUS_OPEN') %}
+            {% if listing.status.isOpen %}
                 <li>
-                    <a href="{{ path('app_listing_show', {id: listing.id}) }}">
+                    <a href="{{ path('app_listing_show', {slug: listing.slug}) }}">
                         {{ listing.title }}
                     </a>
                 </li>

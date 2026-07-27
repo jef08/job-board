@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Company Profile{% endblock %}
+
+{% block body %}
+    <h1>Edit Your Company Profile</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.location) }}
+        {{ form_row(form.bio) }}
+        {{ form_row(form.company.industry) }}
+        {{ form_row(form.company.website) }}
+        {{ form_row(form.company.companySize) }}
+        <button type="submit">Save Changes</button>
+    {{ form_end(form) }}
+{% endblock %}
