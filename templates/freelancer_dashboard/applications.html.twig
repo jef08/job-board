@@ -4,7 +4,7 @@
     <h2>{{ application.listing.title }}</h2>
     <p><strong>Company: </strong>{{ application.listing.company.user.email }}</p>
 
-    <p><strong>Status: </strong>{{ application.status }}</p>
+    <p><strong>Status: </strong>{{ application.status.label }}</p>
 
     <p><strong>Applied on: </strong>{{ application.createdAt|date('Y-m-d') }}</p>
 

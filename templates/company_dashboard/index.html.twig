@@ -19,7 +19,7 @@
 
     <p><strong>Applications: </strong>{{ listing.applications|length }}</p>
 
-    <a href="{{ path('app_listing_show', {id: listing.id}) }}">View Listing</a>
+    <a href="{{ path('app_listing_show', {slug: listing.slug}) }}">View Listing</a>
     <a href="{{ path('app_listing_edit', {id: listing.id}) }}">Edit Listing</a>
 
     <form method="post" action="{{ path('app_listing_delete', {id: listing.id}) }}" onsubmit="return confirm('Delete this listing? This cannot be undone.');">
@@ -39,5 +39,9 @@
 {% else %}
 <p>You haven't created any listings yet.</p>
 {% endfor %}
+
+{% if app.user %}
+    <a href="{{ path('app_logout') }}">Log out</a>
+{% endif %}
 
 {% endblock %}

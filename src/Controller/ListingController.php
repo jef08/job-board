@@ -81,7 +81,7 @@ final class ListingController extends AbstractController
         ]);
     }
 
-    #[Route('/listing/{id}', name: 'app_listing_show')]
+    #[Route('/listing/{slug}', name: 'app_listing_show')]
     public function show(#[MapEntity(mapping: ['slug' => 'slug'])] Listing $listing): Response {
         return $this->render('listing/show.html.twig', [
             'listing' => $listing,
