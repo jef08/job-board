@@ -3,28 +3,8 @@
 {% block title %}Job Board — Find Work, Find Talent{% endblock %}
 
 {% block body %}
-    <h1>Job Board</h1>
-    <p>Connecting freelancers with companies looking for talent.</p>
-
-    {% if app.user %}
-        <p>Welcome back, {{ app.user.name }}.</p>
-        {% if is_granted('ROLE_COMPANY') %}
-            <a href="{{ path('company_dashboard') }}">Go to your dashboard</a>
-        {% elseif is_granted('ROLE_FREELANCER') %}
-            <a href="{{ path('freelancer_dashboard') }}">Go to your dashboard</a>
-        {% endif %}
-    {% else %}
-        <a href="{{ path('app_login') }}">Log in</a>
-        <a href="{{ path('app_register') }}">Sign up</a>
-    {% endif %}
-
-    <hr>
-
-    <h2>For Companies</h2>
-    <p>Post job listings and review applications from freelancers.</p>
-
-    <h2>For Freelancers</h2>
-    <p>Browse open listings and apply to jobs that match your skills.</p>
-
-    <p><a href="{{ path('app_listing') }}">Browse all listings</a></p>
+{% include 'home/_hero.html.twig' %}
+{% include 'home/_categories.html.twig' %}
+{% include 'home/_why_use.html.twig' %}
+{% include 'home/_call_to_action.html.twig' %}
 {% endblock %}

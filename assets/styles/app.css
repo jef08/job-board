@@ -1,3 +1,31 @@
-body {
-    background-color: skyblue;
+:root {
+    /*Colors*/
+    --accent-color: rgb(255, 127, 84);
+
+    /*button measurements*/
+    --primary-btn-border-radius: 5px;
+    --primary-btn-padding: 8px;
+
+    /*Font sizes*/
+    --primary-font-size: clamp(2rem, 5vw, 3rem);
+    --secondary-font-size: clamp(1.25rem, 2vw, 1.75rem);
+    --tertiary-font-size: clamp(1rem, 1.25vw, 1.25rem);
+}
+
+
+.primary-button {
+    background-color: var(--accent-color);
+    border-radius: var(--primary-btn-border-radius);
+    border-style: none;
+    padding: var(--primary-btn-padding);
+    font-size: var(--tertiary-font-size);
+    font-weight: 600;
+}
+
+h1 {
+    font-size: var(--primary-font-size);
+}
+
+p {
+    font-size: var(--secondary-font-size);
 }
