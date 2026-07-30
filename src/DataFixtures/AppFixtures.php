@@ -39,13 +39,26 @@ class AppFixtures extends Fixture
 
     private function createCategories(ObjectManager $manager): array
     {
-        $names = ['Web Development', 'Mobile Development', 'Design', 'Marketing', 'Writing'];
+        $categoryData = [
+            'Web Development' => 'bi-code-slash',
+            'Mobile Development' => 'bi-phone',
+            'Design & Creative' => 'bi-palette',
+            'Writing & Translation' => 'bi-pencil-square',
+            'Marketing & Sales' => 'bi-megaphone',
+            'Data & Analytics' => 'bi-bar-chart',
+            'IT & Networking' => 'bi-hdd-network',
+            'Admin & Customer Support' => 'bi-headset',
+            'Video & Animation' => 'bi-camera-reels',
+            'Business & Finance' => 'bi-briefcase',
+        ];
+
         $categories = [];
 
-        foreach ($names as $name) {
+        foreach ($categoryData as $name => $icon) {
             $category = new Category();
             $category->setName($name);
             $category->setSlug((string) $this->slugger->slug($name)->lower());
+            $category->setIcon($icon);
 
             $manager->persist($category);
             $categories[] = $category;

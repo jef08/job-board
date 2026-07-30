@@ -4,7 +4,7 @@
 
 {% block body %}
 {% include 'home/_hero.html.twig' %}
-{% include 'home/_categories.html.twig' %}
+{% include 'home/_categories.html.twig' with {cateogires: categories } %}
 {% include 'home/_why_use.html.twig' %}
 {% include 'home/_call_to_action.html.twig' %}
 {% endblock %}

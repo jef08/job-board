@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Job Board{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
         {% endblock %}
@@ -12,6 +12,87 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">Job Board</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_listing') }}">Browse Listings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_register') }}">For Companies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_register') }}">For Freelancers</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        {% if app.user %}
+                            {% if is_granted('ROLE_COMPANY') %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('company_dashboard') }}">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('app_company_profile_edit') }}">Profile</a>
+                                </li>
+                            {% elseif is_granted('ROLE_FREELANCER') %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('freelancer_dashboard') }}">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('app_freelancer_profile_edit') }}">Profile</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_logout') }}">Log out</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link me-2" href="{{ path('app_login') }}">Log in</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="background-color: var(--accent-color); border-radius: var(--primary-btn-border-radius)" href="{{ path('app_register') }}">Sign up</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer class="bg-dark text-light py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <h5>Job Board</h5>
+                        <p class="text-secondary">Connecting freelancers with companies looking for talent.</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5>Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="{{ path('app_listing') }}" class="text-light text-decoration-none">Browse Listings</a></li>
+                            <li><a href="{{ path('app_register') }}" class="text-light text-decoration-none">Sign Up</a></li>
+                            <li><a href="{{ path('app_login') }}" class="text-light text-decoration-none">Log In</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5>About</h5>
+                        <p class="text-secondary">A portfolio project built with Symfony.</p>
+                    </div>
+                </div>
+                <hr class="text-secondary">
+                <small class="d-block text-center text-secondary mb-0">&copy; {{ "now"|date("Y") }} Job Board. All rights reserved.</small>
+            </div>
+        </footer>
     </body>
 </html>

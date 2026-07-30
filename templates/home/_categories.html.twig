@@ -1,6 +1,20 @@
 <section class="bg-light py-5">
     <div class="container">
-        <h1>From marketing to web development</h1>
-        <p>We have job offers spanning multiple industries. Browse job offers by category or by keyword.</p>
+        <h2 class="text-center">Work across every industry</h2>
+        <p class="text-center pb-4">From web development to marketing, find opportunities in the categories that match your skills.</p>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
+        {% for category in categories %}
+            <div class="col">
+                <a href="{{ path('app_listing', {category: category.id}) }}" class="text-decoration-none">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center py-4">
+                            <i class="category-icon bi {{ category.icon }} fs-1 mb-2"></i>
+                            <p class="fw-semibold text-dark mb-0">{{ category.name }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
     </div>
 </section>

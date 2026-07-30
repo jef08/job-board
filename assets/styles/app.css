@@ -1,6 +1,8 @@
 :root {
     /*Colors*/
     --accent-color: rgb(255, 127, 84);
+    --text-on-accent: #4A1B0C;
+    --main-background-color: #f8f9fa;
 
     /*button measurements*/
     --primary-btn-border-radius: 5px;
@@ -8,13 +10,42 @@
 
     /*Font sizes*/
     --primary-font-size: clamp(2rem, 5vw, 3rem);
+    --section-heading-font-size: clamp(1.75rem, 3vw, 2.5rem);
     --secondary-font-size: clamp(1.25rem, 2vw, 1.75rem);
     --tertiary-font-size: clamp(1rem, 1.25vw, 1.25rem);
 }
 
+/* General */
+html, body {
+    height: 100%;
+}
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+h1 {
+    font-size: var(--primary-font-size);
+}
+
+h2 {
+    font-size: var(--section-heading-font-size);
+}
+
+p, .why-use-list {
+    font-size: var(--secondary-font-size);
+}
+
+/* Landing page */
 .primary-button {
     background-color: var(--accent-color);
+    color: var(--text-on-accent);
     border-radius: var(--primary-btn-border-radius);
     border-style: none;
     padding: var(--primary-btn-padding);
@@ -22,10 +53,26 @@
     font-weight: 600;
 }
 
-h1 {
-    font-size: var(--primary-font-size);
+.primary-button:hover {
+    background-color: var(--text-on-accent);
+    color: var(--main-background-color);
 }
 
-p {
-    font-size: var(--secondary-font-size);
+.cta-btn {
+    background-color: var(--text-on-accent);
+    color: var(--main-background-color);
+    border-radius: var(--primary-btn-border-radius);
+    border-style: none;
+    padding: var(--primary-btn-padding);
+    font-size: var(--tertiary-font-size);
+    font-weight: 600;
+}
+
+.cta-btn:hover {
+    background-color: var(--main-background-color);
+    color: var(--text-on-accent);
+}
+
+.category-icon {
+    color: var(--accent-color);
 }

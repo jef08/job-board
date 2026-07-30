@@ -21,6 +21,9 @@ class Category
     #[ORM\Column(length: 100, unique: true)]
     private ?string $slug = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $icon = null;
+
     /**
      * @var Collection<int, Listing>
      */
@@ -57,6 +60,18 @@ class Category
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): static
+    {
+        $this->icon = $icon;
 
         return $this;
     }
