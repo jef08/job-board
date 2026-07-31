@@ -76,3 +76,46 @@ p, .why-use-list {
 .category-icon {
     color: var(--accent-color);
 }
+
+/*Registration page*/
+.role-tiles .form-check {
+    flex: 1;
+    padding-left: 0;
+}
+
+.role-tiles .form-check-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.role-tiles .form-check-label {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s ease-in-out;
+}
+
+.role-tiles .form-check-input:checked + .form-check-label {
+    border-color: var(--accent-color);
+    background-color: rgba(255, 127, 84, 0.08);
+    color: var(--text-on-accent);
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(255, 127, 84, 0.25);
+}
+
+.password-toggle-btn,
+.password-toggle-btn:hover,
+.input-group .password-toggle-btn:active {
+    border: 1px solid #ced4da;
+    background: white;
+}

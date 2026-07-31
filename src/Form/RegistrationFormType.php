@@ -29,19 +29,20 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('role', ChoiceType::class, [
                 'choices' => [
-                    'Freelancer' => 'ROLE_FREELANCER',
-                    'Company' => 'ROLE_COMPANY',
+                    '🧑‍💻 Freelancer' => 'ROLE_FREELANCER',
+                    '🏢 Company' => 'ROLE_COMPANY',
                 ],
                 'expanded' => true,
                 'multiple' => false,
                 'mapped' => false,
-                'label' => "I'm a",
+                'label' => false,
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'label' => 'I understand this is a demo application.',
                 'constraints' => [
                     new IsTrue(
-                        message: 'You should agree to our terms.',
+                        message: 'You should to our terms.',
                     ),
                 ],
             ])

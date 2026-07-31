@@ -1,21 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Sign up{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="row g-0">
+        <div class="col-lg-8 d-flex align-items-center">
+            <div class="container py-5" style="max-width: 500px;">
+                <h1 class="mb-1">Let's get started</h1>
+                <p class="text-secondary mb-4">Create your account to start posting to jobs or applying to them</p>
+                    {{ form_errors(registrationForm) }}
+                    {{ form_start(registrationForm) }}
+                    
+                    <p class="fw-semibold mb-2">I am a:</p>
+                    <div class="role-tiles d-flex gap-3 mb-4">
+                        {% for child in registrationForm.role %}
+                            {{ form_widget(child) }}
+                        {% endfor %}
+                    </div>
+                    
+                    {{ form_row(registrationForm.email, {attr: {placeholder: 'your.email@example.com'} }) }}
+                    {{ form_row(registrationForm.name, {attr: {placeholder: 'John Doe'} }) }}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.plainPassword, 'Password') }}
+                        <div class="input-group" data-controller="password-toggle">
+                            {{ form_widget(registrationForm.plainPassword, {attr: {'data-password-toggle-target': 'input'}}) }}
+                            <button class="btn password-toggle-btn" type="button" data-action="password-toggle#toggle">
+                                <i class="bi bi-eye" data-password-toggle-target="icon" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+                    {{ form_row(registrationForm.agreeTerms) }}
 
-    {{ form_errors(registrationForm) }}
+                    <button type="submit" class="btn primary-button">Register</button>
+                    {{ form_end(registrationForm) }}
+            </div>
+        </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.name) }}
-        {{ form_row(registrationForm.role) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        <div class="col-lg-4 d-none d-lg-block p-0">
+            <img src="{{ asset('images/pexels-cottonbro.jpg') }}" alt="Man working" class="w-100 h-100 object-fit-cover">
+        </div>
+    </div>
 {% endblock %}
