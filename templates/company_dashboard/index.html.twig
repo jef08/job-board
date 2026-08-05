@@ -1,47 +1,83 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Your Listings{% endblock %}
-
+{% block title %}Company Dashboard{% endblock %}
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container p-5" style="min-height: calc(100vh - 76px);">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="mb-0">Welcome!</h1>
+        <div class="d-flex gap-2">
+            <a href="{{ path('app_company_profile_edit') }}" class="btn edit-button">Edit Profile</a>
+            <a href="{{ path('app_listing_new') }}" class="btn primary-button">+ New Listing</a>
+        </div>
+    </div>
 
-<h1>Company Dashboard</h1>
-<a href="{{ path('app_company_profile_edit') }}">Edit Profile</a>
-{% for listing in listings %}
-<div> 
-    <h2>{{ listing.title }}</h2>
-    <p><strong>Status: </strong>{{ listing.status.label }}</p>
+    <h2 class="mb-3">Your Listings</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for listing in listings %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{ listing.title }}</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm data-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical" aria-hidden="true"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ path('app_listing_show', {slug: listing.slug}) }}">View Listing</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_listing_edit', {id: listing.id}) }}">Edit Listing</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_listing_applicants', {id: listing.id}) }}">View Applicants ({{ listing.applications|length }})</a></li>
 
-    <p><strong>Created: </strong>{{ listing.createdAt|date('Y-m-d') }}</p>
+                                    {% if listing.isOpen %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="post" action="{{ path('app_listing_close', {id: listing.id}) }}" onsubmit="return confirm('Close this listing?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('close-listing-' ~ listing.id) }}">
+                                                <button type="submit" class="dropdown-item">Close Listing</button>
+                                            </form>
+                                        </li>
+                                    {% endif %}
 
-    <p><strong>Applications: </strong>{{ listing.applications|length }}</p>
+                                    <li>
+                                        <form method="post" action="{{ path('app_listing_delete', {id: listing.id}) }}" onsubmit="return confirm('Delete this listing? This cannot be undone.');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete-listing-' ~ listing.id) }}">
+                                            <button type="submit" class="dropdown-item text-danger">Delete Listing</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
-    <a href="{{ path('app_listing_show', {slug: listing.slug}) }}">View Listing</a>
-    <a href="{{ path('app_listing_edit', {id: listing.id}) }}">Edit Listing</a>
+                        <span class="badge {{ listing.isOpen ? 'bg-success' : 'bg-secondary' }} mb-2">{{ listing.status.label }}</span>
 
-    <form method="post" action="{{ path('app_listing_delete', {id: listing.id}) }}" onsubmit="return confirm('Delete this listing? This cannot be undone.');">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete-listing-' ~ listing.id) }}">
-        <button type="submit">Delete listing</button>
-    </form>
-    
-    <a href="{{ path('app_listing_applicants', {id: listing.id}) }}">View Applicants</a>
-    
-    <form method="post" action="{{ path('app_listing_close', {id: listing.id}) }}" onsubmit="return confirm('Close this listing?');">
-        <input type="hidden" name="_token" value="{{ csrf_token('close-listing-' ~ listing.id) }}">
-        <button type="submit">Close listing</button>
-    </form>
+                        <p class="card-text small mb-1">Posted {{ listing.createdAt|date('M j, Y') }}</p>
+                        <p class="card-text small">{{ listing.applications|length }} applicant(s)</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-secondary">You haven't created any listings yet. <a href="{{ path('app_listing_new') }}">Create your first one</a>.</p>
+        {% endfor %}
+    </div>
 
+    <section class="mt-5">
+    <h2 class="mb-3">Recent Applicants</h2>
+    <div class="list-group">
+        {% for application in recentApplicants %}
+            <a href="{{ path('app_application_show', {id: application.id}) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <strong>{{ application.freelancer.user.name }}</strong>
+                    <div class="text-secondary small">applied to {{ application.listing.title }}</div>
+                </div>
+                <span class="badge {{ application.status.value == 'rejected' ? 'bg-danger text-light' : (application.status.value == 'accepted' ? 'bg-success' : 'bg-secondary') }}">
+                    {{ application.status.label }}
+                </span>
+            </a>
+        {% else %}
+            <p class="text-secondary">No applicants yet.</p>
+        {% endfor %}
+    </div>
+</section>
 </div>
-
-{% else %}
-<p>You haven't created any listings yet.</p>
-{% endfor %}
-
-{% if app.user %}
-    <a href="{{ path('app_logout') }}">Log out</a>
-{% endif %}
-
 {% endblock %}

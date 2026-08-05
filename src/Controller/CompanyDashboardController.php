@@ -7,13 +7,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\CompanyProfileFormType;
+use App\Repository\ApplicationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class CompanyDashboardController extends AbstractController
 {
     #[Route('/dashboard/company', name: 'company_dashboard')]
-    public function companyDashboard(ListingRepository $listingRepository): Response
+    public function companyDashboard(ListingRepository $listingRepository, ApplicationRepository $applicationRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_COMPANY', null, 'You cannot access this page');
 
@@ -25,8 +26,11 @@ final class CompanyDashboardController extends AbstractController
             ['createdAt' => 'DESC']
         );
 
+        $recentApplicants = $applicationRepository->findRecentForCompany($user->getCompany(), 5);
+
         return $this->render('company_dashboard/index.html.twig', [
             'listings' => $listings,
+            'recentApplicants' => $recentApplicants,
         ]);
     }
 

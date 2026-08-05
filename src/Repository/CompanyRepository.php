@@ -16,6 +16,19 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
+    public function findFeatured(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('company')
+            ->innerJoin('company.listings', 'listing')
+            ->where('listing.status = :status')
+            ->setParameter('status', 'open')
+            ->groupBy('company.id')
+            ->orderBy('company.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Company[] Returns an array of Company objects
 //     */

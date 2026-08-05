@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ApplicationRepository;
 use App\Repository\ListingRepository;
 use App\Form\FreelancerProfileFormType;
+use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 final class FreelancerDashboardController extends AbstractController
 {
 #[Route('/dashboard/freelancer', name: 'freelancer_dashboard')]
-    public function index(ListingRepository $listingRepository, ApplicationRepository $applicationRepository): Response
+    public function index(ListingRepository $listingRepository, ApplicationRepository $applicationRepository, CompanyRepository $companyRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_FREELANCER');
 
@@ -30,9 +31,12 @@ final class FreelancerDashboardController extends AbstractController
             5
         );
 
+        $featuredCompanies = $companyRepository->findFeatured(5);
+
         return $this->render('freelancer_dashboard/index.html.twig', [
             'featuredListings' => $featuredListings,
             'recentApplications' => $recentApplications,
+            'featuredCompanies' => $featuredCompanies,
         ]);
     }
 
@@ -75,4 +79,6 @@ final class FreelancerDashboardController extends AbstractController
             'form' => $form,
         ]);
     }
+
+
 }
