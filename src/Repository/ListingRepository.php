@@ -16,7 +16,7 @@ class ListingRepository extends ServiceEntityRepository
         parent::__construct($registry, Listing::class);
     }
 
-    public function findFiltered(?string $search, ?int $category): array {
+    public function findFiltered(?string $search, ?int $category): \Doctrine\ORM\QueryBuilder {
         $qb = $this->createQueryBuilder('listing');
         $qb->where('listing.status = :status')->setParameter('status', 'open');
 
@@ -28,7 +28,7 @@ class ListingRepository extends ServiceEntityRepository
             $qb->andWhere('listing.category = :category')->setParameter('category', $category);
         }
 
-        return $qb->orderBy('listing.createdAt', 'DESC')->getQuery()->getResult();
+        return $qb->orderBy('listing.createdAt', 'DESC');
     }
 
     public function findOneBySlug(string $slug): ?Listing {

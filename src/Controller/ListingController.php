@@ -15,6 +15,7 @@ use App\Security\Voter\ListingVoter;
 use App\Enum\ListingStatus;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Knp\Component\Pager\PaginatorInterface;
 
 final class ListingController extends AbstractController
 {
@@ -39,13 +40,16 @@ final class ListingController extends AbstractController
     }
 
     #[Route('/listing', name: 'app_listing')]
-    public function index(ListingRepository $listingRepository, Request $request, CategoryRepository $categoryRepository): Response
+    public function index(ListingRepository $listingRepository, Request $request, CategoryRepository $categoryRepository, PaginatorInterface $paginator): Response
     {
 
         $search = $request->query->get('search');
-        $category = $request->query->getInt('category');
+        $categoryParam = $request->query->get('category');
+        $category = ($categoryParam !== null && $categoryParam !== '') ? (int) $categoryParam : null;
 
-        $listings = $listingRepository->findFiltered($search, $category ?: null);
+        $query = $listingRepository->findFiltered($search, $category);
+
+        $listings = $paginator->paginate($query, $request->query->getInt('page', 1), 12);
 
         $categories = $categoryRepository->findAll();
 
