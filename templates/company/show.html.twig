@@ -1,42 +1,59 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ company.user.name }}{% endblock %}
-
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
-    <h1>{{ company.user.name }}</h1>
 
-    {% if company.industry %}
-        <p><strong>Industry:</strong> {{ company.industry }}</p>
-    {% endif %}
-
-    {% if company.user.location %}
-        <p><strong>Location:</strong> {{ company.user.location }}</p>
-    {% endif %}
-
-    {% if company.website %}
-        <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank" rel="noopener">{{ company.website }}</a></p>
-    {% endif %}
-
-    {% if company.companySize %}
-        <p><strong>Company size:</strong> {{ company.companySize }} employees</p>
-    {% endif %}
-
-    {% if company.user.bio %}
-        <div class="bio">{{ company.user.bio }}</div>
-    {% endif %}
-
-    <h2>Open Listings</h2>
-    <ul>
-        {% for listing in company.listings %}
-            {% if listing.isOpen %}
-                <li>
-                    <a href="{{ path('app_listing_show', {slug: listing.slug}) }}">
-                        {{ listing.title }}
-                    </a>
-                </li>
+<div class="container p-5" style="min-height: calc(100vh - 76px);">
+<div class="col">
+    <div class="card px-3 px-lg-5 h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+            <h1 class="card-title text-center">{{ company.user.name }}</h1>
+            
+            {% if company.user.bio %}
+                <p class="text-center pb-3">{{ company.user.bio }}</p>
             {% endif %}
-        {% else %}
-            <li>No open listings right now.</li>
-        {% endfor %}
-    </ul>
+            
+            {% if company.industry %}
+                <p><strong>Industry:</strong> {{ company.industry }}</p>
+            {% endif %}
+
+            {% if company.user.location %}
+                <p><strong>Location:</strong> {{ company.user.location }}</p>
+            {% endif %}
+
+            {% if company.website %}
+                <p><strong>Website: </strong>{{ company.website }}</p>
+            {% endif %}
+
+            {% if company.companySize %}
+                <p><strong>Company size:</strong> {{ company.companySize }} employees</p>
+            {% endif %}
+
+            
+
+            <h2 class="pt-5">Open Listings</h2>
+                {% for listing in company.listings %}
+                    {% if listing.isOpen %}
+                    <div class="col my-3">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ listing.title }}</h5>
+                                <p class="card-subtitle mb-2">{{ listing.company.user.name }}</p>
+                                <p class="card-text small">{{ listing.description|truncate_words(20) }}</p>
+                                <p class="card-text small">{{ listing.jobType }} &middot; {{ listing.salaryRange }}</p>
+                                <a href="{{ path('app_listing_show', {slug: listing.slug}) }}" class="btn tertiary-button mt-auto" style="width: 150px;">View Listing</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                        <p>No listings found.</p>
+                    {% endif %}
+                {% else %}
+                    <li>No open listings right now.</li>
+                {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}

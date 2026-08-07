@@ -1,21 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Listing{% endblock %}
-
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
-<h1>{{ listing.title }}</h1>
-<p>{{ listing.description }}</p>
-<p><strong>Category:</strong>{{ listing.category.name }}</p>
-<p><strong>Posted by:</strong>{{ listing.company.user.email }}</p>
-<p><strong>Status:</strong>{{ listing.status.label }}</p>
-{% if is_granted('ROLE_FREELANCER') %}
-    {% if listing.isOpen %}
-    <a href="{{ path('app_listing_apply', {id: listing.id}) }}">Apply</a>
-    {% else %}
-    <p>This listing is closed.</p>
-    {% endif %}
-{% endif %}
-{% for message in app.flashes('error') %}
-    <p style="color:red;">{{ message }}</p>
-{% endfor %}
+<div class="container p-5" style="min-height: calc(100vh - 76px);">
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body d-flex flex-column">
+                <h2 class="card-title">{{ listing.title }}</h2>
+                <p class="card-subtitle mb-2"><a href="{{ path('app_company_show', { id: listing.company.id }) }}" style="color: var(--text-on-accent)">{{ listing.company.user.name }}</a></p>
+                <p><strong>About:</strong><br>{{ listing.description }}</p>
+                <p><strong>{{ listing.category.name }}</strong></p>
+                <p><strong>Status: </strong>{{ listing.status.label }}</p>
+                {% if is_granted('ROLE_FREELANCER') %}
+                    {% if listing.isOpen %}
+                    <a href="{{ path('app_listing_apply', {id: listing.id}) }}" style="text-decoration: none; width: 125px" class="primary-button text-center my-3">Apply</a>
+                   {% else %}
+                    <p>This listing is closed.</p>
+                    {% endif %}
+                   {% else %}
+                    <p class="text-center"><a href="{{ path('app_login') }}" style="color: var(--text-on-accent)">Log in as a freelancer to apply.</a></p>
+                {% endif %}
+                <a href="{{ path('app_listing') }}" style="text-decoration: none; width: 125px" class="primary-button text-center">&larr; Return</a>
+                {% for message in app.flashes('error') %}
+                    <p style="color:red;">{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
