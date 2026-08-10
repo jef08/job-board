@@ -25,6 +25,9 @@ class Freelancer
     #[ORM\Column(nullable: true)]
     private ?int $yearsExperience = null;
 
+    #[ORM\ManyToOne]
+    private ?Category $category = null;
+
     /**
      * @var Collection<int, Application>
      */
@@ -73,6 +76,18 @@ class Freelancer
     public function setYearsExperience(?int $yearsExperience): static
     {
         $this->yearsExperience = $yearsExperience;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

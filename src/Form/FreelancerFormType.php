@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class FreelancerFormType extends AbstractType
 {
@@ -21,6 +23,12 @@ class FreelancerFormType extends AbstractType
             ])
             ->add('yearsExperience', IntegerType::class, [
                 'required' => false,
+            ])
+            ->add('category', EntityType::class, [
+            'class' => Category::class,
+            'choice_label' => 'name',
+            'placeholder' => 'Select a category',
+            'required' => false,
             ])
         ;
     }

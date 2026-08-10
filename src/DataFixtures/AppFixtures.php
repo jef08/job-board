@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
         $categories = $this->createCategories($manager);
         $companies = $this->createCompanies($manager, $faker, 10);
         $listings = $this->createListings($manager, $faker, $companies, $categories);
-        $freelancers = $this->createFreelancers($manager, $faker, 10);
+        $freelancers = $this->createFreelancers($manager, $faker, 10, $categories);
         $this->createApplications($manager, $faker, $freelancers, $listings);
 
         $manager->flush();
@@ -133,7 +133,7 @@ class AppFixtures extends Fixture
         return $listings;
     }
 
-    private function createFreelancers(ObjectManager $manager, Generator $faker, int $count): array
+    private function createFreelancers(ObjectManager $manager, Generator $faker, int $count, array $categories): array
     {
         $freelancers = [];
 
@@ -150,6 +150,7 @@ class AppFixtures extends Fixture
             $freelancer->setUser($user);
             $freelancer->setHourlyRate($faker->randomFloat(2, 20, 150));
             $freelancer->setYearsExperience($faker->numberBetween(0, 20));
+            $freelancer->setCategory($faker->randomElement($categories));
 
             $manager->persist($user);
             $manager->persist($freelancer);

@@ -29,6 +29,18 @@ class CompanyRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findFiltered(?string $search): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('company');
+
+        if ($search) {
+            $qb->andWhere('company.industry LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->orderBy('company.id', 'DESC');
+    }
+
 //    /**
 //     * @return Company[] Returns an array of Company objects
 //     */

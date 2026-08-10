@@ -1,27 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Companies{% endblock %}
-
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
+<div class="container p-5" style="min-height: calc(100vh - 76px);">
     <h1>Companies</h1>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-10">
+            <input type="text" name="search" class="form-control" placeholder="Search by industry..." value="{{ app.request.query.get('search') }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn primary-button w-100">Search</button>
+        </div>
+    </form>
 
     <div class="company-list">
         {% for company in companies %}
-            <div class="company-card">
-                <h2>
-                    <a href="{{ path('app_company_show', {id: company.id}) }}">
-                        {{ company.user.name }}
-                    </a>
-                </h2>
-                {% if company.industry %}
-                    <p>{{ company.industry }}</p>
-                {% endif %}
-                {% if company.user.location %}
-                    <p>{{ company.user.location }}</p>
-                {% endif %}
+            <div class="col my-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h2><a href="{{ path('app_company_show', {id: company.id}) }}" style="color: var(--text-on-accent);">{{ company.user.name }}</a></h2>
+                        {% if company.industry %}
+                            <p><strong>{{ company.industry }}</strong></p>
+                        {% endif %}
+                        {% if company.user.location %}
+                            <p>{{ company.user.location }}</p>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        {% else %}
-            <p>No companies registered yet.</p>
-        {% endfor %}
+            {% else %}
+                <p>No companies registered yet.</p>
+            {% endfor %}
     </div>
+</div>
 {% endblock %}

@@ -1,7 +1,25 @@
 {% extends 'base.html.twig' %}
+{% block title %}Create a Listing{% endblock %}
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button>Create</button>
-{{ form_end(form) }}
+
+<div class="container p-5 d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 76px);">
+<div class="card border-0 shadow-sm" style="max-width: 600px; width: 100%;">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="mb-1">Create a Listing</h1>
+            <p class="text-secondary mb-4">Fill out the details below to post a new job listing.</p>
+
+            {{ form_start(form) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.category) }}
+                {{ form_row(form.jobType) }}
+                {{ form_row(form.salaryRange) }}
+
+                <button type="submit" class="btn primary-button w-100">Create Listing</button>
+            {{ form_end(form) }}
+            <a href="{{ path('company_dashboard') }}" style="text-decoration: none; width: 125px;" class="btn edit-button mt-4 text-center">&larr; Return</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

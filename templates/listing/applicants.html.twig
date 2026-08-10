@@ -1,21 +1,35 @@
-<h1>Applicants for {{ listing.title }}</h1>
+{% extends 'base.html.twig' %}
+{% block title %}Applicants{% endblock %}
+{% block body_class %}textured-bg{% endblock %}
+
+{% block body %}
+
+<div class="container p-5" style="min-height: calc(100vh - 76px);">
+    <div class="mb-5">
+        <h1>Applicants for {{ listing.title }}</h1>
+        <a href="{{ path('company_dashboard') }}" style="text-decoration: none; width: 125px;" class="btn edit-button mt-4 text-center">&larr; Return</a>
+    </div>
 
 {% for application in applications %}
 
-<div>
-
-<p><strong>Applicant:</strong>{{ application.freelancer.user.email }}</p>
-<p><strong>Status:</strong>{{ application.status.label }}</p>
-<p><strong>Applied:</strong>{{ application.createdAt|date('Y-m-d')}}</p>
-
-<li>
-    <a href="{{ path('app_application_show', {id: application.id}) }}">
-        {{ application.freelancer.user.name }}
-    </a>
-     — {{ application.status.label }}
-</li>
+<div class="col">
+    <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+        <p><strong>Applicant: </strong><a href="{{ path('app_freelancer_show', {id: application.freelancer.id}) }}" style="color: var(--text-on-accent);">
+                {{ application.freelancer.user.name }}
+            </a></p>
+        <p><strong>Status: </strong>{{ application.status.label }}</p>
+        <p><strong>Applied: </strong>{{ application.createdAt|date('Y-m-d')}}</p>
+        <p><a href="{{ path('app_application_show', {id: application.id}) }}" style="color: var(--text-on-accent);">
+                <strong>View Application</strong>
+            </a></p>
+        </div>
+    </div>
 </div>
+
 
 {% else %}
 <p>No applications</p>
 {% endfor %}
+</div>
+{% endblock %}
