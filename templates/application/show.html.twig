@@ -29,6 +29,12 @@
             <button type="submit" class="btn primary-button w-50 my-1">Reject</button>
         </form>
     {% endif %}
+    {% if is_granted(constant('App\\Security\\Voter\\ApplicationVoter::WITHDRAW'), application) %}
+    <form method="post" action="{{ path('app_application_withdraw', {id: application.id}) }}" onsubmit="return confirm('Withdraw this application?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('withdraw-application-' ~ application.id) }}">
+        <button type="submit" class="btn primary-button w-50 mt-2">Withdraw Application</button>
+    </form>
+    {% endif %}
     {% if is_granted('ROLE_FREELANCER') %}
             <a href="{{ path('freelancer_dashboard') }}" style="text-decoration: none; width: 125px;" class="btn edit-button mt-4 text-center">&larr; Return</a>
     {% elseif is_granted('ROLE_COMPANY') %}

@@ -112,4 +112,19 @@ final class ApplicationController extends AbstractController
             'id' => $application->getListing()->getId(),
         ]);
     }
+
+    #[Route('/application/{id}/withdraw', name: 'app_application_withdraw', methods: ['POST'])]
+    public function withdraw(Application $application, EntityManagerInterface $em, Request $request): Response {
+        $this->denyAccessUnlessGranted(ApplicationVoter::WITHDRAW, $application);
+
+        if (!$this->isCsrfTokenValid('withdraw-application-' . $application->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $application->setStatus(ApplicationStatus::Withdrawn);
+        $em->flush();
+
+        $this->addFlash('success', 'Application withdrawn.');
+        return $this->redirectToRoute('app_freelancer_applications');
+    }
 }
