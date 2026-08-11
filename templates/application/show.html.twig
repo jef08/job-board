@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Application from {{ application.freelancer.user.name }}{% endblock %}
-
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
+<div class="container p-5 d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 76px);">
+<div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
     <h1>Application for {{ application.listing.title }}</h1>
 
     <p><strong>From:</strong>
-        <a href="{{ path('app_freelancer_show', {id: application.freelancer.id}) }}">
+        <a href="{{ path('app_freelancer_show', {id: application.freelancer.id}) }}" style="color: var(--text-on-accent);">
             {{ application.freelancer.user.name }}
         </a>
     </p>
@@ -19,11 +22,19 @@
     {% if is_granted(constant('App\\Security\\Voter\\ApplicationVoter::MANAGE'), application) %}
         <form method="post" action="{{ path('app_application_accept', {id: application.id}) }}" onsubmit="return confirm('Accept this application?');">
             <input type="hidden" name="_token" value="{{ csrf_token('accept-application-' ~ application.id) }}">
-            <button type="submit">Accept</button>
+            <button type="submit" class="btn primary-button w-50 my-1">Accept</button>
         </form>
         <form method="post" action="{{ path('app_application_reject', {id: application.id}) }}" onsubmit="return confirm('Reject this application?');">
             <input type="hidden" name="_token" value="{{ csrf_token('reject-application-' ~ application.id) }}">
-            <button type="submit">Reject</button>
+            <button type="submit" class="btn primary-button w-50 my-1">Reject</button>
         </form>
     {% endif %}
+    {% if is_granted('ROLE_FREELANCER') %}
+            <a href="{{ path('freelancer_dashboard') }}" style="text-decoration: none; width: 125px;" class="btn edit-button mt-4 text-center">&larr; Return</a>
+    {% elseif is_granted('ROLE_COMPANY') %}
+        <a href="{{ path('company_dashboard') }}" style="text-decoration: none; width: 125px;" class="btn edit-button mt-4 text-center">&larr; Return</a>
+    {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

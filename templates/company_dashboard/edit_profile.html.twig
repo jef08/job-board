@@ -1,17 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Edit Company Profile{% endblock %}
-
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
-    <h1>Edit Your Company Profile</h1>
+<div class="container p-5 d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 76px);">
+<div class="card border-0 shadow-sm" style="max-width: 600px; width: 100%;">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="mb-1">Edit your Profile</h1>
+            <p class="text-secondary mb-4">Fill out the details below to edit your profile.</p>
 
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.location) }}
-        {{ form_row(form.bio) }}
-        {{ form_row(form.company.industry) }}
-        {{ form_row(form.company.website) }}
-        {{ form_row(form.company.companySize) }}
-        <button type="submit">Save Changes</button>
-    {{ form_end(form) }}
+            {{ form_start(form) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.location) }}
+                {{ form_row(form.bio) }}
+                {{ form_row(form.company.industry) }}
+                {{ form_row(form.company.website) }}
+                {{ form_row(form.company.companySize) }}
+                <button type="submit" class="btn primary-button w-100">Save Changes</button>
+            {{ form_end(form) }}
+                <a href="{{ path('company_dashboard') }}" style="text-decoration: none; width: 125px;" class="btn edit-button mt-4 text-center">&larr; Return</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

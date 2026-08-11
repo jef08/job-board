@@ -1,12 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Listing{% endblock %}
-
+{% block body_class %}textured-bg{% endblock %}
 {% block body %}
-<h1>Apply to {{ listing.title }}</h1>
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button>Submit Application</button>
-{{ form_end(form) }}
-
+<div class="container p-5 d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 76px);">
+<div class="card border-0 shadow-sm" style="max-width: 600px; width: 100%;">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="mb-1">Apply to {{ listing.title }}</h1>
+            <p class="text-secondary mb-4">Write out a message to apply to this job.</p>
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button class="btn primary-button">Submit Application</button>
+            {{ form_end(form) }}
+            <a href="{{ path('freelancer_dashboard') }}" style="text-decoration: none; width: 125px;" class="btn edit-button mt-4 text-center">&larr; Return</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
