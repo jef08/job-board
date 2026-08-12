@@ -17,13 +17,6 @@ use App\Security\Voter\ApplicationVoter;
 
 final class ApplicationController extends AbstractController
 {
-    #[Route('/application', name: 'app_application')]
-    public function index(): Response
-    {
-        return $this->render('application/index.html.twig', [
-            'controller_name' => 'ApplicationController',
-        ]);
-    }
 
     #[Route('/application/{id}', name: 'app_application_show')]
     public function show(Application $application): Response
