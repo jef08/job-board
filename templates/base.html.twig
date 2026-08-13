@@ -22,8 +22,15 @@
 
                 <div class="collapse navbar-collapse" id="mainNav">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_listing') }}">Browse Listings</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Browse
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ path('app_listing') }}">Listings</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_company') }}">Companies</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_freelancers') }}">Freelancers</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_register') }}">For Companies</a>
@@ -81,6 +88,8 @@
                         <h5>Quick Links</h5>
                         <ul class="list-unstyled">
                             <li><a href="{{ path('app_listing') }}" class="text-light text-decoration-none">Browse Listings</a></li>
+                            <li><a href="{{ path('app_company') }}" class="text-light text-decoration-none">Browse Companies</a></li>
+                            <li><a href="{{ path('app_freelancers') }}" class="text-light text-decoration-none">Browse Freelancers</a></li>
                             <li><a href="{{ path('app_register') }}" class="text-light text-decoration-none">Sign Up</a></li>
                             <li><a href="{{ path('app_login') }}" class="text-light text-decoration-none">Log In</a></li>
                         </ul>
